@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Peliculas</title>
+        <script src="../resources/jsfCrud.js" type="text/javascript"></script>
+    </h:head>
+    <h:body>
+
+        <!-- Toolbar -->
+        
+        <h:form>
+            <a href="../../index.xhtml" style="font-size: x-large"> Inicio </a>
+            <p:growl id="messages" showDetail="true" />
+            <h1><center>Toolbar</center></h1>
+            <br/>
+            <p:toolbar>
+                <f:facet name="left">
+                    <p:commandButton type="button" value="New" icon="ui-icon-document" />
+
+                    <p:commandButton type="button" value="Open" icon="ui-icon-folder-open" />
+
+                    <span class="ui-separator">
+                        <span class="ui-icon ui-icon-grip-dotted-vertical" />
+                    </span>
+
+                    <p:commandButton type="button" title="Save" icon="ui-icon-disk" />
+                    <p:commandButton type="button" title="Delete" icon="ui-icon-trash" />
+                    <p:commandButton type="button" title="Print" icon="ui-icon-print" />
+                </f:facet>
+
+                <f:facet name="right">
+                    <p:menuButton value="Options">
+                        <p:menuitem value="Save" actionListener="#{peliculaC.add()}" update="messages" icon="ui-icon-disk" />
+                        <p:menuitem value="Update" actionListener="#{peliculaC.update()}" update="messages" icon="ui-icon-arrowrefresh-1-w" />
+                        <p:menuitem value="Delete" actionListener="#{peliculaC.delete()}" ajax="false" icon="ui-icon-close" />
+                        <p:menuitem value="Homepage" url="#" icon="ui-icon-extlink" />
+                    </p:menuButton>
+                </f:facet>
+
+            </p:toolbar>
+        </h:form>
+        
+        <br/>
+        <p:separator/>
+        
+        <!-- Dropdown -->
+        <h1><center>Dropdown</center></h1>
+        <br/>
+
+        <h:form>
+            <p:growl id="msgs" showDetail="true" />
+
+            <p:panel header="Select a Location" style="margin-bottom:10px;">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <p:outputLabel for="country" value="Country: " />
+                    <p:selectOneMenu id="country" value="#{dropdownView.country}" style="width:150px">
+                        <p:ajax listener="#{dropdownView.onCountryChange()}" update="city" />
+                        <f:selectItem itemLabel="Select Country" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{dropdownView.countries}" />
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="city" value="City: " />
+                    <p:selectOneMenu id="city" value="#{dropdownView.city}" style="width:150px">
+                        <f:selectItem itemLabel="Select City" itemValue="" noSelectionOption="true" />
+                        <f:selectItems value="#{dropdownView.cities}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        
+        <br/>
+        <p:separator/>
+        <br/>
+
+        <h:form id="form">
+            <p:growl autoUpdate="true" life="1500"/>
+            <p:dataTable id="data" value="#{peliculaC.lstpelicula}" var="pelicula" paginator="true" rows="10" selectionMode="single" selection="#{peliculaC.pelicula}" rowKey="#{pelicula.idPel}">
+                <p:column headerText="Codigo">
+                    <p:outputLabel value="#{pelicula.idPel}"/>
+                </p:column>
+                <p:column headerText="Titulo">
+                    <p:outputLabel value="#{pelicula.titulo}"/>
+                </p:column>
+                <p:column headerText="Estado">
+                    <p:outputLabel value="#{pelicula.estado}"/>
+                </p:column>
+                <p:column headerText="Genero Favorito">
+                    <p:outputLabel value="#{pelicula.genero_idGen}"/>
+                </p:column>
+                <p:column headerText="Director Favorito">
+                    <p:outputLabel value="#{pelicula.director_idDirect}"/>
+                </p:column>
+                <p:column headerText="Actor Favorito">
+                    <p:outputLabel value="#{pelicula.actor_idAct}"/>
+                </p:column>>
+                <f:facet name="footer">
+                    <p:commandButton value="Agregar" actionListener="#{peliculaC.preparPelicula()}" oncomplete="PF('NewPelicula').show();" update="NewPelicula"/>
+                    <p:commandButton value="Refresh" actionListener="#{peliculaC.list()}" update="form"/>
+                </f:facet>
+            </p:dataTable>
+            <p:contextMenu for="data">
+                <p:menuitem value="editar" icon="ui-icon-search" oncomplete="PF('UpdatePelicula').show();" update="UpdatePelicula"/>
+                <p:menuitem value="borrar" icon="ui-icon-clear" update="data" actionListener="#{peliculaC.delete()}"/>
+            </p:contextMenu>
+        </h:form>
+        <ui:include src="Add.xhtml"/>
+        <ui:include src="Update.xhtml"/>
+
+        <br/>
+        <p:separator/>
+        
+        <!-- Accordion -->
+        <h1><center>Accordion</center></h1>
+        <br/>
+        
+        <h:form id="form1">           
+            <p:growl id="msgs1" showDetail="true" />
+
+            <h3 style="margin-top:0">Basic</h3>
+            <p:accordionPanel>
+                <p:tab title="Avengers Infinity War Infinity War">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/Avengers Infinity War.jpg" alt="" style = "width:250px" />
+                        <h:outputText
+                            value="The story begins as Don Vito Corleone..." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="The Amazing The Amazing SpiderMan">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/The Amazing SpiderMan.jpg" alt="" style = "width:250px" />
+                        <h:outputText value="Francis Ford Coppola's legendary..." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Thor Ragnarok">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/Thor Ragnarok.jpg" alt="" style = "width:250px" />
+                        <h:outputText value="After a break of more than 15 years..." />
+                    </h:panelGrid>
+                </p:tab>
+            </p:accordionPanel>
+
+            <h3>Multiple Selection</h3>
+            <p:accordionPanel multiple="true">
+                <p:tab title="Avengers Infinity War Infinity War">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/Avengers Infinity War.jpg" alt="" style = "width:250px" />
+                        <h:outputText
+                            value="The story begins as Don Vito Corleone..." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="The Amazing The Amazing SpiderMan">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/The Amazing SpiderMan.jpg" alt="" style = "width:250px" />
+                        <h:outputText value="Francis Ford Coppola's legendary..." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Thor Ragnarok">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/Thor Ragnarok.jpg" alt="" style = "width:250px" />
+                        <h:outputText value="After a break of more than 15 years...." />
+                    </h:panelGrid>
+                </p:tab>
+            </p:accordionPanel>
+
+            <h3>On-Demand Loading</h3>
+            <p:accordionPanel dynamic="true" cache="true">
+                <p:tab title="Avengers Infinity War Infinity War">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/Avengers Infinity War.jpg" alt="" style = "width:250px" />
+                        <h:outputText
+                            value="The story begins as Don Vito Corleone..." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="The Amazing The Amazing SpiderMan">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/The Amazing SpiderMan.jpg" alt="" style = "width:250px" />
+                        <h:outputText value="Francis Ford Coppola's legendary..." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Thor Ragnarok">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/Thor Ragnarok.jpg" alt="" style = "width:250px" />
+                        <h:outputText value="After a break of more than 15 years..." />
+                    </h:panelGrid>
+                </p:tab>
+            </p:accordionPanel>
+
+            <h3>Change Event</h3>
+            <p:accordionPanel>
+                <p:ajax event="tabChange" listener="#{peliculaC.onTabChange}" update=":form1:msgs1" />
+                <p:ajax event="tabClose" listener="#{peliculaC.onTabClose}" update=":form1:msgs1" />
+
+                <p:tab title="Avengers Infinity War Infinity War">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/Avengers Infinity War.jpg" alt="" style = "width:250px" />
+                        <h:outputText
+                            value="The story begins as Don Vito Corleone..." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="The Amazing The Amazing SpiderMan">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/The Amazing SpiderMan.jpg" alt="" style = "width:250px" />
+                        <h:outputText value="Francis Ford Coppola's legendary..." />
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title="Thor Ragnarok">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <img src="../../images/Thor Ragnarok.jpg" alt="" style = "width:250px" />
+                        <h:outputText value="After a break of more than 15 years..." />
+                    </h:panelGrid>
+                </p:tab>
+            </p:accordionPanel>
+
+            <h3>DataModel</h3>
+            <p:accordionPanel value="#{peliculaC.lstpelicula}" var="pelicula">
+                <p:tab title="Pelicula - #{pelicula.idPel}">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <f:facet name="header">
+                            <img src="../../images/#{pelicula.titulo}.jpg" alt="" style = "width:250px" />
+                        </f:facet>                    
+                        <h:outputText value="Titulo:" style="font-weight: bold" />
+                        <h:outputText value="#{pelicula.titulo}" />
+
+                        <h:outputText value="Director:" style="font-weight: bold" />
+                        <h:outputText value="#{pelicula.director_idDirect}" />
+
+                        <h:outputText value="Actor:" style="font-weight: bold" />
+                        <h:outputText value="#{pelicula.actor_idAct}" />
+
+                    </h:panelGrid>
+                </p:tab>
+            </p:accordionPanel>
+        </h:form>
+
+        <br/>
+        <p:separator/>
+        
+        <!-- Fieldset -->
+        <h1><center>Fieldset</center></h1>
+        <br/>
+        
+        <h:form>
+            <p:growl id="msgs2" showDetail="true" />
+
+            <p:fieldset legend="Basic" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <img src="../../images/Thor Ragnarok.jpg" alt="" style = "width:250px" />
+                    <h:outputText
+                        value="Thor está preso en el otro extremo del universo. Necesita regresar a tiempo para evitar que 
+                        la todopoderosa Hela destruya su mundo, pero para escapar de su confinamiento y evitar el apocalipsis 
+                        tendrá que vencer antes al Increíble Hulk en un torneo de gladiadores." />
+                </h:panelGrid>
+            </p:fieldset>
+
+            <p:fieldset legend="Toggleable" toggleable="true" toggleSpeed="500">
+                <p:ajax event="toggle" listener="#{peliculaC.handleToggle}" update="msgs2" />
+                <h:panelGrid columns="2" cellpadding="5">
+                    <img src="../../images/Thor Ragnarok.jpg" alt="" style = "width:250px" />
+                    <h:outputText value="Thor está preso en el otro extremo del universo. Necesita regresar a tiempo para evitar que 
+                                  la todopoderosa Hela destruya su mundo, pero para escapar de su confinamiento y evitar el apocalipsis 
+                                  tendrá que vencer antes al Increíble Hulk en un torneo de gladiadores."></h:outputText>
+                </h:panelGrid>
+            </p:fieldset>
+        </h:form>
+
+    </h:body>
+</html>
+
